@@ -1,0 +1,16 @@
+[
+{
+  "modid": "titlechanger",
+  "name": "Title Changer",
+  "description": "Changes the Minecraft window title.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["maxwell-lt"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
