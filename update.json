@@ -7,7 +7,7 @@
     "1.0": "First version"
   },
   "promos": {
-    "1.10.2-latest": "1.0": "First version",
-    "1.11.2-latest": "1.0": "First version"
+    "1.10.2-latest": "1.0",
+    "1.11.2-latest": "1.0"
   }
 }
