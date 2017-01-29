@@ -1,7 +1,6 @@
 package maxwell_lt.titlechanger;
 
-import org.lwjgl.opengl.Display;
-
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
@@ -9,8 +8,10 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
-		
-		if (Config.windowTitle != "") Display.setTitle(TextProcessor.replace(Config.windowTitle));
+
+		MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
+
+		ReplaceTitle.Replace();
 	}
 
 }
