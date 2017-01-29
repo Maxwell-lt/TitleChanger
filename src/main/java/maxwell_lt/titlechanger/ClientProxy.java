@@ -10,7 +10,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
 		
-		if (Config.windowTitle != "") Display.setTitle(Config.windowTitle);
+		if (Config.windowTitle != "") Display.setTitle(TextProcessor.replace(Config.windowTitle));
 	}
 
 }
