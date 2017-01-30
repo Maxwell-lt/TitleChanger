@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = TitleChanger.MODID, version = TitleChanger.VERSION, name = TitleChanger.MODNAME, useMetadata = true, acceptedMinecraftVersions = "[1.10,1.11.2]")
+@Mod(modid = TitleChanger.MODID, version = TitleChanger.VERSION, name = TitleChanger.MODNAME, useMetadata = true, acceptedMinecraftVersions = "[1.10,1.11.2]", updateJSON = "https://raw.githubusercontent.com/Maxwell-lt/TitleChanger/master/update.json")
 public class TitleChanger
 {
     public static final String MODID = "titlechanger";
