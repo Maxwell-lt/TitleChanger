@@ -14,7 +14,7 @@ ext.modid = "titlechanger"
 ext.modname = "Title Changer"
 ext.moddescription = "Changes the Minecraft window title."
 ext.modauthors = "maxwell-lt"
-ext.modversion = "1.1.1"
+ext.modversion = "1.1.2"
 ext.modpackage = "maxwell_lt.titlechanger"
 ext.modarchive = "titlechanger"
 
