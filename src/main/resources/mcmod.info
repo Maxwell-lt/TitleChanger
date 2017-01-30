@@ -1,16 +1,16 @@
 [
-{
-  "modid": "titlechanger",
-  "name": "Title Changer",
-  "description": "Changes the Minecraft window title.",
-  "version": "1.0",
-  "mcversion": "1.11.2",
-  "url": "https://github.com/Maxwell-lt/TitleChanger",
-  "updateJson": "https://raw.githubusercontent.com/Maxwell-lt/TitleChanger/master/update.json",
-  "authorList": ["maxwell-lt"],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "${modid}",
+    "name": "${name}",
+    "description": "${description}",
+    "version": "${version}",
+    "mcversion": "1.11.2",
+    "url": "${url}",
+    "updateUrl": "${updatejson}",
+    "authorList": ["${authors}"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]
