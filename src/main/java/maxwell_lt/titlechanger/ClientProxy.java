@@ -9,7 +9,9 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
 
-		MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
+		if (Config.windowTitle.contains("%time%")) {
+			MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
+		}
 
 		ReplaceTitle.Replace();
 	}
