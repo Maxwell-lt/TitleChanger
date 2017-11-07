@@ -1,23 +1,23 @@
 {
   "homepage": "https://github.com/Maxwell-lt/TitleChanger/",
   "1.10.2": {
+    "1.1.2": "Update to 1.12.2",
     "1.1.1": "Only refresh the title bar every tick if %time% is in the title string",
     "1.1.0": "Added runtime replacements",
     "1.0": "First version"
   },
   "1.11.2": {
+    "1.1.2": "Update to 1.12.2",
     "1.1.1": "Only refresh the title bar every tick if %time% is in the title string",
     "1.1.0": "Added runtime replacements",
     "1.0": "First version"
   },
   "1.12.2": {
-    "1.1.1": "Only refresh the title bar every tick if %time% is in the title string",
-    "1.1.0": "Added runtime replacements",
-    "1.0": "First version"
+    "1.1.2": "Update to 1.12.2"
   },
   "promos": {
-    "1.10.2-latest": "1.1.1",
-    "1.11.2-latest": "1.1.1",
-    "1.12.2-latest": "1.1.1"
+    "1.10.2-latest": "1.1.2",
+    "1.11.2-latest": "1.1.2",
+    "1.12.2-latest": "1.1.2"
   }
 }
