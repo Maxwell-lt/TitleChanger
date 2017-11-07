@@ -4,7 +4,7 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -21,9 +21,9 @@ ext.modarchive = "titlechanger"
 ext.url = "https://www.github.com/Maxwell-lt/TitleChanger"
 ext.updatejson = "https://raw.githubusercontent.com/Maxwell-lt/TitleChanger/master/update.json"
 
-ext.mcversion = "1.11.2"
-ext.forgeversion = "13.20.0.2206"
-ext.mcpmappings = "snapshot_20161220"
+ext.mcversion = "1.12.2"
+ext.forgeversion = "14.23.0.2491"
+ext.mcpmappings = "snapshot_20170624"
 
 
 version = modversion
