@@ -12,7 +12,7 @@ public class TitleChanger
 {
     public static final String MODID = "titlechanger";
     
-    @SidedProxy(clientSide="maxwell_lt.titlechanger.ClientProxy")
+    @SidedProxy(clientSide="maxwell_lt.titlechanger.ClientProxy", serverSide="maxwell_lt.titlechanger.ServerProxy")
     public static CommonProxy proxy;
     
     @Mod.Instance
