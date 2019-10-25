@@ -1,6 +1,5 @@
 package maxwell_lt.titlechanger;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 

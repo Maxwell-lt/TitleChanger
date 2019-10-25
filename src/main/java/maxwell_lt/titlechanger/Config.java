@@ -4,7 +4,6 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
-import org.apache.logging.log4j.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.nio.file.Path;

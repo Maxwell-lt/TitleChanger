@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/Maxwell-lt/TitleChanger/issues"
+authors="maxwell_lt"
+[[mods]]
+modId="titlechanger"
+version="${file.jarVersion}"
+displayName="TitleChanger"
+description='''
+Changes the Minecraft window title.
+'''
+#[[dependencies.titlechanger]]
+#    modId="forge"
+#    mandatory=true
+#    versionRange="[28,)"
+#    ordering="NONE"
+#    side="BOTH"
+#[[dependencies.titlechanger]]
+#    modId="minecraft"
+#    mandatory=true
+#    versionRange="[1.13.2,1.14.4,1.15)"
+#    ordering="NONE"
+#    side="BOTH"
+
