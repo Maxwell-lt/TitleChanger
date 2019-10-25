@@ -1,34 +1,36 @@
 package maxwell_lt.titlechanger;
 
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.opengl.Display;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.model.ItemLayerModel;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.loading.FMLLoader;
+import org.lwjgl.glfw.*;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 
 public class ReplaceTitle {
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void clientTick(TickEvent.ClientTickEvent e) {
         Replace();
     }
 
     public static void Replace() {
-        if (Config.windowTitle != "") {
-            Display.setTitle(processText(Config.windowTitle));
+        if (!Config.WINDOW_TITLE.equals("")) {
+            glfwSetWindowTitle(Minecraft.getInstance().mainWindow.getHandle(), processText(Config.WINDOW_TITLE.toString()));
         }
     }
 
-    public static String processText(String formatString) {
-        String mcVersion = Loader.instance().getMinecraftModContainer().getVersion();
-        String modCount = Integer.toString(Loader.instance().getModList().size());
-        String time = new SimpleDateFormat(Config.timeFormat).format(new Date()).toString();
+    private static String processText(String formatString) {
+        String modCount = Integer.toString(FMLLoader.getLoadingModList().getMods().size());
+        String time = new SimpleDateFormat(Config.TIME_FORMAT.toString()).format(new Date()).toString();
 
-        formatString = formatString.replaceAll("%mcver%", mcVersion);
-        formatString = formatString.replaceAll("%modcount%", modCount);
+        formatString = formatString.replaceAll("%modCount%", modCount);
         formatString = formatString.replaceAll("%time%", time);
 
         return formatString;
