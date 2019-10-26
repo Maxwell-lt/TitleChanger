@@ -1,33 +1,56 @@
 package maxwell_lt.titlechanger;
 
-import org.apache.logging.log4j.Level;
-import net.minecraftforge.common.config.Configuration;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.nio.file.Path;
 
 public class Config {
 
-	private static final String CATEGORY_GENERAL = "general";
-	
-	public static String windowTitle = "";
-	public static String timeFormat = "h:mm a";
-	
-	public static void readConfig() {
-		Configuration cfg = CommonProxy.config;
-		try {
-			cfg.load();
-			initGeneralConfig(cfg);
-		} catch (Exception exception) {
-			TitleChanger.logger.log(Level.ERROR, "Problem loading config file!", exception);
-		} finally {
-			if (cfg.hasChanged()) {
-				cfg.save();
-			}
-		}
-	}
+    private static final String CATEGORY_GENERAL = "general";
 
-	private static void initGeneralConfig(Configuration cfg) {
-		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General configuration");
-		windowTitle = cfg.getString("windowtitle", CATEGORY_GENERAL, "", "The title of the Minecraft window. Leave blank to keep the default window title for your version of Minecraft.\nSome special values that will be inserted at runtime:\n%mcver% -> The current Minecraft version\n%modcount% -> Number of loaded mods\n%time% -> Current system time\n");
-		timeFormat = cfg.getString("timeformat", CATEGORY_GENERAL, "h:mm a", "Format to display time in. See http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns");
-	}
+    private static final ForgeConfigSpec.Builder GENERAL_BUILDER = new ForgeConfigSpec.Builder();
 
+    public static ForgeConfigSpec.ConfigValue<String> WINDOW_TITLE;
+    public static ForgeConfigSpec.ConfigValue<String> TIME_FORMAT;
+
+    public static ForgeConfigSpec GENERAL_CONFIG;
+
+    static {
+        GENERAL_BUILDER.comment("General Configuration").push(CATEGORY_GENERAL);
+        WINDOW_TITLE = GENERAL_BUILDER
+                .comment("The title of the Minecraft window. Leave blank to keep the default window title for your version of Minecraft.\nSome special values that will be inserted at runtime:\n%mcver% -> The current Minecraft version\n%modcount% -> Number of loaded mods\n%time% -> Current system time\n")
+                .define("windowtitle", "");
+        TIME_FORMAT = GENERAL_BUILDER
+                .comment("Format to display time in. See http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns")
+                .define("timeformat", "h:mm a");
+        GENERAL_BUILDER.pop();
+
+        GENERAL_CONFIG = GENERAL_BUILDER.build();
+    }
+
+    public static void loadConfig(ForgeConfigSpec spec, Path path) {
+
+        final CommentedFileConfig configData = CommentedFileConfig.builder(path)
+                .sync()
+                .autosave()
+                .writingMode(WritingMode.REPLACE)
+                .build();
+
+        configData.load();
+        spec.setConfig(configData);
+    }
+
+    @SubscribeEvent
+    public static void onLoad(final ModConfig.Loading configEvent) {
+
+    }
+
+    @SubscribeEvent
+    public static void onReload(final ModConfig.ConfigReloading configEvent) {
+
+    }
 }

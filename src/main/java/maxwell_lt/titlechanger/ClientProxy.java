@@ -1,19 +1,24 @@
 package maxwell_lt.titlechanger;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class ClientProxy extends CommonProxy {
-	
-	@Override
-	public void preInit(FMLPreInitializationEvent e) {
-		super.preInit(e);
+public class ClientProxy implements IProxy {
+    @Override
+    public void init() {
+        MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
+        ReplaceTitle.Replace();
+    }
 
-		if (Config.windowTitle.contains("%time%")) {
-			MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
-		}
+    @Override
+    public World getClientWorld() {
+        return Minecraft.getInstance().world;
+    }
 
-		ReplaceTitle.Replace();
-	}
-
+    @Override
+    public PlayerEntity getClientPlayer() {
+        return Minecraft.getInstance().player;
+    }
 }
