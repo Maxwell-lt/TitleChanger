@@ -16,17 +16,29 @@ public class Config {
 
     public static ForgeConfigSpec.ConfigValue<String> WINDOW_TITLE;
     public static ForgeConfigSpec.ConfigValue<String> TIME_FORMAT;
+    public static ForgeConfigSpec.ConfigValue<String> PLACEHOLDER_TEXT;
 
     public static ForgeConfigSpec GENERAL_CONFIG;
 
     static {
         GENERAL_BUILDER.comment("General Configuration").push(CATEGORY_GENERAL);
         WINDOW_TITLE = GENERAL_BUILDER
-                .comment("The title of the Minecraft window. Leave blank to keep the default window title for your version of Minecraft.\nSome special values that will be inserted at runtime:\n%mcver% -> The current Minecraft version\n%modcount% -> Number of loaded mods\n%time% -> Current system time\n")
+                .comment("The title of the Minecraft window. Leave blank to keep the default window title for your version of Minecraft." +
+                        "\nSome special values that will be inserted at runtime:" +
+                        "\n%mcver% -> The current Minecraft version" +
+                        "\n%modcount% -> Number of loaded mods" +
+                        "\n%time% -> Current system time" +
+                        "\n%playerloc% -> Location of the player, if available" +
+                        "\n%chunk% -> Current chunk, if available" +
+                        "\n%biome% -> Current biome, if available" +
+                        "\n%score% -> Current score of the player, if available\n")
                 .define("windowtitle", "");
         TIME_FORMAT = GENERAL_BUILDER
                 .comment("Format to display time in. See http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns")
                 .define("timeformat", "h:mm a");
+        PLACEHOLDER_TEXT = GENERAL_BUILDER
+                .comment("String to use as placeholder when a value is unavailable.")
+                .define("placeholdertext", "--");
         GENERAL_BUILDER.pop();
 
         GENERAL_CONFIG = GENERAL_BUILDER.build();
