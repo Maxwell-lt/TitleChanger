@@ -26,7 +26,7 @@ public class TitleChanger
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
-        Config.loadConfig(Config.GENERAL_CONFIG, FMLPaths.CONFIGDIR.get().resolve("titlechanger.toml"));
+        Config.loadConfig(Config.GENERAL_CONFIG, FMLPaths.CONFIGDIR.get().resolve("titlechanger-client.toml"));
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
