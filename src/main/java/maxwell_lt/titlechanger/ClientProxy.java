@@ -9,7 +9,7 @@ public class ClientProxy implements IProxy {
     @Override
     public void init() {
         MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
-        ReplaceTitle.Replace();
+        ReplaceTitle.replace();
     }
 
     @Override

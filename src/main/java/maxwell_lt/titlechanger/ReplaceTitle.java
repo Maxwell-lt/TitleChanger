@@ -3,6 +3,7 @@ package maxwell_lt.titlechanger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.TickEvent;
@@ -20,19 +21,19 @@ public class ReplaceTitle {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void clientTick(TickEvent.ClientTickEvent e) {
-        Replace();
+        replace();
     }
 
-    public static void Replace() {
+    public static void replace() {
         if (!Config.WINDOW_TITLE.get().equals("")) {
-            glfwSetWindowTitle(Minecraft.getInstance().mainWindow.getHandle(), processText(Config.WINDOW_TITLE.get()));
+            glfwSetWindowTitle(Minecraft.getInstance().getMainWindow().getHandle(), processText(Config.WINDOW_TITLE.get()));
         }
     }
 
     private static String processText(String formatString) {
         String mcVersion = Minecraft.getInstance().getVersion();
         String modCount = Integer.toString(FMLLoader.getLoadingModList().getMods().size());
-        String time = new SimpleDateFormat(Config.TIME_FORMAT.get()).format(new Date()).toString();
+        String time = new SimpleDateFormat(Config.TIME_FORMAT.get()).format(new Date());
         String location = getPlayerLocationOrPlaceholder();
         String score = getPlayerScoreOrPlaceholder();
         String biome = getPlayerBiomeOrPlaceholder();
@@ -59,7 +60,8 @@ public class ReplaceTitle {
             LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
         }
         if (playerEntity != null && world != null) {
-            Biome biome = world.getBiome(new BlockPos(playerEntity.posX, playerEntity.posY, playerEntity.posZ));
+            Vec3d pos = playerEntity.getPositionVec();
+            Biome biome = world.getBiome(new BlockPos(pos.x, pos.y, pos.z));
             return biome.getDisplayName().getString();
         } else {
             return Config.PLACEHOLDER_TEXT.get();
@@ -89,9 +91,10 @@ public class ReplaceTitle {
             LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
         }
         if (playerEntity != null) {
-            posX = String.format("%.0f", playerEntity.posX);
-            posY = String.format("%.0f", playerEntity.posY);
-            posZ = String.format("%.0f", playerEntity.posZ);
+            Vec3d pos = playerEntity.getPositionVector();
+            posX = String.format("%.0f", pos.x);
+            posY = String.format("%.0f", pos.y);
+            posZ = String.format("%.0f", pos.z);
         } else {
             posX = posY = posZ = Config.PLACEHOLDER_TEXT.get();
         }

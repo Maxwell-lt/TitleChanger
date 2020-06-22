@@ -45,7 +45,6 @@ public class Config {
     }
 
     public static void loadConfig(ForgeConfigSpec spec, Path path) {
-
         final CommentedFileConfig configData = CommentedFileConfig.builder(path)
                 .sync()
                 .autosave()
@@ -62,7 +61,7 @@ public class Config {
     }
 
     @SubscribeEvent
-    public static void onReload(final ModConfig.ConfigReloading configEvent) {
+    public static void onReload(final ModConfig.Reloading configEvent) {
 
     }
 }

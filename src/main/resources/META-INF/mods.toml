@@ -13,6 +13,6 @@ updateJSONURL="https://raw.githubusercontent.com/Maxwell-lt/TitleChanger/master/
 [[dependencies.titlechanger]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"
