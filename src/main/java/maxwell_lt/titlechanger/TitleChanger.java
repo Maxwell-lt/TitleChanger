@@ -1,5 +1,6 @@
 package maxwell_lt.titlechanger;
 
+import maxwell_lt.titlechanger.config.Config;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
