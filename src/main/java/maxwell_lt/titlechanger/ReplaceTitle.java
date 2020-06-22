@@ -11,10 +11,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ReplaceTitle {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -55,13 +56,13 @@ public class ReplaceTitle {
         String biome = infoRetriever.getBiome(playerEntity, world);
         String chunk = infoRetriever.getChunk(playerEntity);
 
-        formatString = formatString.replaceAll("%mcver%", mcVersion);
-        formatString = formatString.replaceAll("%modcount%", modCount);
-        formatString = formatString.replaceAll("%time%", time);
-        formatString = formatString.replaceAll("%playerloc%", location);
-        formatString = formatString.replaceAll("%score%", score);
-        formatString = formatString.replaceAll("%biome%", biome);
-        formatString = formatString.replaceAll("%chunk%", chunk);
+        formatString = formatString.replace("%mcver%", mcVersion);
+        formatString = formatString.replace("%modcount%", modCount);
+        formatString = formatString.replace("%time%", time);
+        formatString = formatString.replace("%playerloc%", location);
+        formatString = formatString.replace("%score%", score);
+        formatString = formatString.replace("%biome%", biome);
+        formatString = formatString.replace("%chunk%", chunk);
 
         return formatString;
     }
