@@ -5,11 +5,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class InfoRetriever {
-    private static final Logger LOGGER = LogManager.getLogger();
     private final String placeholderText;
 
     public InfoRetriever(String placeholderText) {
@@ -18,7 +15,7 @@ public class InfoRetriever {
 
     public String getBiome(PlayerEntity playerEntity, World world) {
         if (playerEntity != null && world != null) {
-            Vec3d pos = playerEntity.getPositionVec();
+            Vec3d pos = playerEntity.getPositionVector();
             Biome biome = world.getBiome(new BlockPos(pos.x, pos.y, pos.z));
             return biome.getDisplayName().getString();
         } else {
