@@ -1,118 +1,132 @@
 package maxwell_lt.titlechanger;
 
+import maxwell_lt.titlechanger.config.Config;
+import maxwell_lt.titlechanger.util.InfoRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ReplaceTitle {
+    public static final String VERSION = "%mcver%";
+    public static final String MOD_COUNT = "%modcount%";
+    public static final String TIME = "%time%";
+    public static final String PLAYER_LOCATION = "%playerloc%";
+    public static final String SCORE = "%score%";
+    public static final String BIOME = "%biome%";
+    public static final String CHUNK = "%chunk%";
+
     private static final Logger LOGGER = LogManager.getLogger();
+    private final InfoRetriever infoRetriever;
+
+    private final String mcVersion;
+    private final String modCount;
+    private final DateFormat timeFormatter;
+    private final Map<String, Supplier<String>> transformations;
+
+    private PlayerEntity playerEntity;
+    private World world;
+
+    public ReplaceTitle() {
+        this.infoRetriever = new InfoRetriever(Config.getPlaceholderText());
+        this.mcVersion = Minecraft.getInstance().getVersion();
+        this.modCount = Integer.toString(FMLLoader.getLoadingModList().getMods().size());
+        this.timeFormatter = new SimpleDateFormat(Config.getTimeFormat());
+
+        this.transformations = generateTransformationMap();
+    }
+
+    /**
+     * Builds a map of required string replacements based on the config
+     * <p>
+     * This prevents unneeded information retrieval methods from running every client tick. Because the map contains
+     * suppliers, the output values can vary based on current conditions.
+     *
+     * @return Map with patterns and replacement suppliers
+     */
+    private Map<String, Supplier<String>> generateTransformationMap() {
+        Map<String, Supplier<String>> transformationMap = new HashMap<>();
+        if (Config.getWindowTitle().contains(VERSION)) {
+            transformationMap.put(VERSION, () -> mcVersion);
+        }
+        if (Config.getWindowTitle().contains(MOD_COUNT)) {
+            transformationMap.put(MOD_COUNT, () -> modCount);
+        }
+        if (Config.getWindowTitle().contains(TIME)) {
+            transformationMap.put(TIME, () -> timeFormatter.format(new Date()));
+        }
+        if (Config.getWindowTitle().contains(PLAYER_LOCATION)) {
+            transformationMap.put(PLAYER_LOCATION, this::getLocation);
+        }
+        if (Config.getWindowTitle().contains(SCORE)) {
+            transformationMap.put(SCORE, this::getScore);
+        }
+        if (Config.getWindowTitle().contains(BIOME)) {
+            transformationMap.put(BIOME, this::getBiome);
+        }
+        if (Config.getWindowTitle().contains(CHUNK)) {
+            transformationMap.put(CHUNK, this::getChunk);
+        }
+        return transformationMap;
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void clientTick(TickEvent.ClientTickEvent e) {
-        Replace();
-    }
-
-    public static void Replace() {
-        if (!Config.WINDOW_TITLE.get().equals("")) {
-            glfwSetWindowTitle(Minecraft.getInstance().mainWindow.getHandle(), processText(Config.WINDOW_TITLE.get()));
+    public void clientTick(TickEvent.ClientTickEvent event) {
+        if (Config.getWindowTitle().equals("")) {
+            return;
         }
-    }
 
-    private static String processText(String formatString) {
-        String mcVersion = Minecraft.getInstance().getVersion();
-        String modCount = Integer.toString(FMLLoader.getLoadingModList().getMods().size());
-        String time = new SimpleDateFormat(Config.TIME_FORMAT.get()).format(new Date()).toString();
-        String location = getPlayerLocationOrPlaceholder();
-        String score = getPlayerScoreOrPlaceholder();
-        String biome = getPlayerBiomeOrPlaceholder();
-        String chunk = getPlayerChunkOrPlaceholder();
-
-        formatString = formatString.replaceAll("%mcver%", mcVersion);
-        formatString = formatString.replaceAll("%modcount%", modCount);
-        formatString = formatString.replaceAll("%time%", time);
-        formatString = formatString.replaceAll("%playerloc%", location);
-        formatString = formatString.replaceAll("%score%", score);
-        formatString = formatString.replaceAll("%biome%", biome);
-        formatString = formatString.replaceAll("%chunk%", chunk);
-
-        return formatString;
-    }
-
-    private static String getPlayerBiomeOrPlaceholder() {
-        PlayerEntity playerEntity = null;
-        World world = null;
+        playerEntity = null;
+        world = null;
         try {
             playerEntity = TitleChanger.proxy.getClientPlayer();
             world = TitleChanger.proxy.getClientWorld();
+            glfwSetWindowTitle(Minecraft.getInstance().getMainWindow().getHandle(), processText(Config.getWindowTitle()));
         } catch (IllegalStateException e) {
             LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
-        }
-        if (playerEntity != null && world != null) {
-            Biome biome = world.getBiome(new BlockPos(playerEntity.posX, playerEntity.posY, playerEntity.posZ));
-            return biome.getDisplayName().getString();
-        } else {
-            return Config.PLACEHOLDER_TEXT.get();
         }
     }
 
-    private static String getPlayerScoreOrPlaceholder() {
-        PlayerEntity playerEntity = null;
-        try {
-            playerEntity = TitleChanger.proxy.getClientPlayer();
-        } catch (IllegalStateException e) {
-            LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
+    /**
+     * Apply transformations to the provided format string to generate the window title
+     *
+     * @param formatString Format template
+     * @return Final window title
+     */
+    private String processText(String formatString) {
+        for (Map.Entry<String, Supplier<String>> entry : transformations.entrySet()) {
+            formatString = formatString.replace(entry.getKey(), entry.getValue().get());
         }
-        if (playerEntity != null) {
-            return Integer.toString(playerEntity.getScore());
-        } else {
-            return Config.PLACEHOLDER_TEXT.get();
-        }
+        return formatString;
     }
 
-    private static String getPlayerLocationOrPlaceholder() {
-        PlayerEntity playerEntity = null;
-        String posX, posY, posZ;
-        try {
-            playerEntity = TitleChanger.proxy.getClientPlayer();
-        } catch (IllegalStateException e) {
-            LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
-        }
-        if (playerEntity != null) {
-            posX = String.format("%.0f", playerEntity.posX);
-            posY = String.format("%.0f", playerEntity.posY);
-            posZ = String.format("%.0f", playerEntity.posZ);
-        } else {
-            posX = posY = posZ = Config.PLACEHOLDER_TEXT.get();
-        }
-        return String.format("%s %s %s", posX, posY, posZ);
+    private String getLocation() {
+        return infoRetriever.getLocation(playerEntity);
     }
 
-    private static String getPlayerChunkOrPlaceholder() {
-        PlayerEntity playerEntity = null;
-        String chunkX, chunkY, chunkZ;
-        try {
-            playerEntity = TitleChanger.proxy.getClientPlayer();
-        } catch (IllegalStateException e) {
-            LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
-        }
-        if (playerEntity != null) {
-            chunkX = String.format("%d", playerEntity.chunkCoordX);
-            chunkY = String.format("%d", playerEntity.chunkCoordY);
-            chunkZ = String.format("%d", playerEntity.chunkCoordZ);
-        } else {
-            chunkX = chunkY = chunkZ = Config.PLACEHOLDER_TEXT.get();
-        }
-        return String.format("%s %s %s", chunkX, chunkY, chunkZ);
+    private String getScore() {
+        return infoRetriever.getScore(playerEntity);
+    }
+
+    private String getBiome() {
+        return infoRetriever.getBiome(playerEntity, world);
+    }
+
+    private String getChunk() {
+        return infoRetriever.getChunk(playerEntity);
     }
 }

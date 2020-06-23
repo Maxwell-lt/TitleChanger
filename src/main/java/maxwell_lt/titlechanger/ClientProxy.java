@@ -8,8 +8,8 @@ import net.minecraftforge.common.MinecraftForge;
 public class ClientProxy implements IProxy {
     @Override
     public void init() {
-        MinecraftForge.EVENT_BUS.register(new ReplaceTitle());
-        ReplaceTitle.Replace();
+        ReplaceTitle replaceTitle = new ReplaceTitle();
+        MinecraftForge.EVENT_BUS.register(replaceTitle);
     }
 
     @Override
