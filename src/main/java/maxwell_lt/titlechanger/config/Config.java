@@ -22,9 +22,9 @@ public class Config {
     }
 
     public static void bakeConfig() {
-        windowTitle = CLIENT_CONFIG.WINDOW_TITLE.get();
-        timeFormat = CLIENT_CONFIG.TIME_FORMAT.get();
-        placeholderText = CLIENT_CONFIG.PLACEHOLDER_TEXT.get();
+        windowTitle = CLIENT_CONFIG.windowTitle.get();
+        timeFormat = CLIENT_CONFIG.timeFormat.get();
+        placeholderText = CLIENT_CONFIG.placeholderText.get();
     }
 
     @SubscribeEvent
