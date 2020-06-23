@@ -1,67 +1,48 @@
 package maxwell_lt.titlechanger.config;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
+import maxwell_lt.titlechanger.TitleChanger;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.nio.file.Path;
-
+@Mod.EventBusSubscriber(modid = TitleChanger.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
-
-    private static final String CATEGORY_GENERAL = "general";
-
-    private static final ForgeConfigSpec.Builder GENERAL_BUILDER = new ForgeConfigSpec.Builder();
-
-    public static ForgeConfigSpec.ConfigValue<String> WINDOW_TITLE;
-    public static ForgeConfigSpec.ConfigValue<String> TIME_FORMAT;
-    public static ForgeConfigSpec.ConfigValue<String> PLACEHOLDER_TEXT;
-
-    public static ForgeConfigSpec GENERAL_CONFIG;
+    public static final ClientConfig CLIENT_CONFIG;
+    public static final ForgeConfigSpec CLIENT_SPEC;
+    private static String windowTitle;
+    private static String timeFormat;
+    private static String placeholderText;
 
     static {
-        GENERAL_BUILDER.comment("General Configuration").push(CATEGORY_GENERAL);
-        WINDOW_TITLE = GENERAL_BUILDER
-                .comment("The title of the Minecraft window. Leave blank to keep the default window title for your version of Minecraft." +
-                        "\nSome special values that will be inserted at runtime:" +
-                        "\n%mcver% -> The current Minecraft version" +
-                        "\n%modcount% -> Number of loaded mods" +
-                        "\n%time% -> Current system time" +
-                        "\n%playerloc% -> Location of the player, if available" +
-                        "\n%chunk% -> Current chunk, if available" +
-                        "\n%biome% -> Current biome, if available" +
-                        "\n%score% -> Current score of the player, if available\n")
-                .define("windowtitle", "");
-        TIME_FORMAT = GENERAL_BUILDER
-                .comment("Format to display time in. See http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns")
-                .define("timeformat", "h:mm a");
-        PLACEHOLDER_TEXT = GENERAL_BUILDER
-                .comment("String to use as placeholder when a value is unavailable.")
-                .define("placeholdertext", "--");
-        GENERAL_BUILDER.pop();
-
-        GENERAL_CONFIG = GENERAL_BUILDER.build();
+        final Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        CLIENT_SPEC = specPair.getRight();
+        CLIENT_CONFIG = specPair.getLeft();
     }
 
-    public static void loadConfig(ForgeConfigSpec spec, Path path) {
-        final CommentedFileConfig configData = CommentedFileConfig.builder(path)
-                .sync()
-                .autosave()
-                .writingMode(WritingMode.REPLACE)
-                .build();
-
-        configData.load();
-        spec.setConfig(configData);
+    public static void bakeConfig() {
+        windowTitle = CLIENT_CONFIG.WINDOW_TITLE.get();
+        timeFormat = CLIENT_CONFIG.TIME_FORMAT.get();
+        placeholderText = CLIENT_CONFIG.PLACEHOLDER_TEXT.get();
     }
 
     @SubscribeEvent
-    public static void onLoad(final ModConfig.Loading configEvent) {
-
+    public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent) {
+        if (configEvent.getConfig().getSpec() == Config.CLIENT_SPEC) {
+            bakeConfig();
+        }
     }
 
-    @SubscribeEvent
-    public static void onReload(final ModConfig.Reloading configEvent) {
+    public static String getWindowTitle() {
+        return windowTitle;
+    }
 
+    public static String getTimeFormat() {
+        return timeFormat;
+    }
+
+    public static String getPlaceholderText() {
+        return placeholderText;
     }
 }

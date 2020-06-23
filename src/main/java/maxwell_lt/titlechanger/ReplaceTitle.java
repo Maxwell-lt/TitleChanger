@@ -12,6 +12,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,11 +23,13 @@ public class ReplaceTitle {
     private final InfoRetriever infoRetriever;
     private final String mcVersion;
     private final String modCount;
+    private final DateFormat timeFormatter;
 
     public ReplaceTitle() {
-        this.infoRetriever = new InfoRetriever(Config.PLACEHOLDER_TEXT.get());
+        this.infoRetriever = new InfoRetriever(Config.getPlaceholderText());
         this.mcVersion = Minecraft.getInstance().getVersion();
         this.modCount = Integer.toString(FMLLoader.getLoadingModList().getMods().size());
+        this.timeFormatter = new SimpleDateFormat(Config.getTimeFormat());
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -35,8 +38,8 @@ public class ReplaceTitle {
     }
 
     public void replace() {
-        if (!Config.WINDOW_TITLE.get().equals("")) {
-            glfwSetWindowTitle(Minecraft.getInstance().getMainWindow().getHandle(), processText(Config.WINDOW_TITLE.get()));
+        if (!Config.getWindowTitle().equals("")) {
+            glfwSetWindowTitle(Minecraft.getInstance().getMainWindow().getHandle(), processText(Config.getWindowTitle()));
         }
     }
 
@@ -50,7 +53,7 @@ public class ReplaceTitle {
             LOGGER.debug("Attempted to call proxy.getClientPlayer() in serverside code.");
         }
 
-        String time = new SimpleDateFormat(Config.TIME_FORMAT.get()).format(new Date());
+        String time = timeFormatter.format(new Date());
         String location = infoRetriever.getLocation(playerEntity);
         String score = infoRetriever.getScore(playerEntity);
         String biome = infoRetriever.getBiome(playerEntity, world);
