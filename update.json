@@ -25,10 +25,14 @@
     "2.1": "Added a handful of new features, including the ability to display the player's current location",
     "2.0-b1": "Initial release for Minecraft 1.14"
   },
+  "1.15.2": {
+    "3.1.0": "Ported to 1.15"
+  },
   "promos": {
     "1.10.2-latest": "1.1.4",
     "1.11.2-latest": "1.1.4",
     "1.12.2-latest": "1.1.4",
-    "1.14.4-latest": "2.2"
+    "1.14.4-latest": "2.2",
+    "1.15.2-latest": "3.1.0"
   }
 }
